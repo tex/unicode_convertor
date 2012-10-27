@@ -16,38 +16,29 @@ generate(D) ->
             output_map(D),
 			init:stop();
         [$#|R] ->
-            D1 = case string:str(R, "Name:") of
-                0 -> D;
-                _ ->
-                    try
-                    case string:str(R, "ISO/IEC") of
-                        0 ->
-                                Re = re:split(R, "ISO |:", [{return, list}]),
-                                CodePage = lists:nth(3, Re),
-                                D2 = dict:erase(name, D),
-                                dict:append(name, "iso-" ++ CodePage, D2);
-                        _ ->
-                                Re = re:split(R, "ISO/IEC |:", [{return, list}]),
-                                CodePage = lists:nth(3, Re),
-                                D2 = dict:erase(name, D),
-                                dict:append(name, "iso-" ++ CodePage, D2)
-                        end
-                    catch _:_ ->
-                            io:format("ERROR: ~p~nERROR: ~p~n", [R, re:split(R, "ISO |:", [{return, list}])])
-                    end
-            end,
-            generate(D1);
+            generate(
+                case R of
+                    "NAME:" ++ Name ->
+                        case string:strip(Name, right, $\n) of
+                            "8859-" ++ Id -> 
+                                dict:append(name, "iso-8859-" ++ Id, dict:erase(name, D));
+                            "CP" ++ Id ->
+                                dict:append(name, "cp" ++ Id, dict:erase(name, D))
+                        end;
+                    _ ->
+                        D
+                end );
         [$\n] ->
             generate(D);
         Text ->
-            D1 = try
-                [Iso, Unicode, UnicodeName] = string:tokens(string:strip(Text, right, $\n), "\t#\t"),
-                parse(D, Iso, Unicode, UnicodeName)
-            catch _:_ ->
-                    io:format("ERROR: ~p~nERROR: ~p~n~n", [Text, string:tokens(string:strip(Text, right, $\n), "\t#\t")]),
-                    D
-            end,
-			generate(D1)
+            generate(
+                case string:str(Text, "#UNDEFINED") of
+                    0 ->
+                        [Iso, Unicode, UnicodeName] = string:tokens(string:strip(Text, right, $\n), "\t#"),
+                        parse(D, Iso, Unicode, UnicodeName);
+                    _ ->
+                        D
+                end )
 	end.
 
 run(D, Fun) ->
@@ -146,4 +137,8 @@ parse(D, "0x" ++ Iso, "0x" ++ Unicode, "LATIN CAPITAL LETTER " ++ UnicodeName) -
 
 parse(D, "0x" ++ Iso, "0x" ++ Unicode, UnicodeName) ->
     CP = dict:fetch(name, D),
-    dict:append({CP, UnicodeName, other}, {other, [{i, Iso}, {u, Unicode}]}, D).
+    dict:append({CP, UnicodeName, other}, {other, [{i, Iso}, {u, Unicode}]}, D);
+
+parse(D, _, _, _) ->
+    D.
+

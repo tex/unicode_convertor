@@ -6,6 +6,7 @@ to convert any capital latin character to small latin character and back,
 to remove accent from any latin character
 
 Author:
+
     Milan Svoboda (milan.svoboda@centrum.cz)
 
 Main function:
@@ -30,7 +31,13 @@ Main function:
         Removes accent from latin characters in Input in code page specified
         in Code.
 
-    To, From, Code - Atom 'unicode', 'iso-8859-??', ...
+    To, From, Code - Atom 'unicode', 'iso-8859-??', 'cp1250', ...
+
+Todo:
+
+- Fix the 'Warning: this clause cannot match because a previous clause at line XXX always matches'
+  This is caused by some Microsoft Windows mappings that maps one unicode character to
+  more than one characters.
 
 Thanks to Witold Baryluk (baryluk) for his project to_unicode
 (https://github.com/baryluk/to_unicode) that served as inspiration for me.
