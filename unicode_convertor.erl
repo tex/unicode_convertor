@@ -1,4 +1,4 @@
--module('unicode_convert').
+-module('unicode_convertor').
 
 % Automatically generated file by to_unicode/gen.sh
 % at Sat Oct 27 14:36:30 CEST 2012.

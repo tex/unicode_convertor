@@ -4,7 +4,7 @@ wget -c -nv --no-parent --mirror ftp://unicode.org/Public/MAPPINGS/
 
 erlc "generate.erl"
 
-M="unicode_convert"
+M="unicode_convertor"
 
 TMP="mappings.tmp"
 rm -f "$TMP"
