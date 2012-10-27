@@ -10,6 +10,8 @@ TMP="mappings.tmp"
 rm -f "$TMP"
 
 (
+echo "% See MIT-LICENSE for licensing information."
+echo
 echo "-module('$M')."
 echo
 echo "% Automatically generated file by to_unicode/gen.sh"

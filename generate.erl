@@ -1,3 +1,6 @@
+% Copyright (c) 2012 Milan Svoboda
+% See MIT-LICENSE for licensing information.
+
 -module(generate).
 
 -export([generate/0]).
