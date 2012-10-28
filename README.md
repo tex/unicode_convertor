@@ -39,5 +39,9 @@ Todo:
   This is caused by some Microsoft Windows mappings that maps one unicode character to
   more than one characters.
 
+  Fixed by removing support to map from unicode to Microsoft Windows mappings.
+  There was bigger problem of unknown reason that has been fixed with this too. The thing
+  is that m() throws badarg for any (unicode, {cp..., ...}) or (cp..., {unicode, ...}).
+
 Thanks to Witold Baryluk (baryluk) for his project to_unicode
 (https://github.com/baryluk/to_unicode) that served as inspiration for me.

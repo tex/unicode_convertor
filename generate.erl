@@ -77,8 +77,8 @@ extract_small_capital(Fun) ->
 output_map(D) ->
     S2 = run(D, extract_all(
             fun (S, CP, _Letter, _Accent, I, U) ->
-                    S1 = sets:add_element(io_lib:format("m(unicode, {'~s', 16#~s}) -> 16#~s;", [CP, I, U]), S),
-                    sets:add_element(io_lib:format("m('~s', {unicode, 16#~s}) -> 16#~s;", [CP, U, I]), S1)
+                    sets:add_element(io_lib:format("m(unicode, {'~s', 16#~s}) -> 16#~s;", [CP, I, U]), S)
+%                   sets:add_element(io_lib:format("m('~s', {unicode, 16#~s}) -> 16#~s;", [CP, U, I]), S1)
             end )),
     [io:format("~s~n", [X]) || X <- sets:to_list(S2)],
     io:format("m(_, {_, _}) -> throw(badarg).~n").
