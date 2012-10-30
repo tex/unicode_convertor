@@ -19,11 +19,11 @@ Main function:
         From - the code page of the input
         Input - Input
 
-    unicode_convert:to_capital(Code, Input) -> Output
+    unicode_convert:to_upper(Code, Input) -> Output
         Converts small latin characters in Input in code page specified
         in Code to capital latin characters.
 
-    unicode_convert:to_small(Code, Input) -> Output
+    unicode_convert:to_lower(Code, Input) -> Output
         Converts capital latin characters in Input in code page specified
         in Code to small latin characters.
 

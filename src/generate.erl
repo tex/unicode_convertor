@@ -3,26 +3,20 @@
 
 -module(generate).
 
--export([generate/0]).
-
-generate() ->
-    generate(dict:new()).
+-export([generate/1, run/2, output_map/1, output_capital_small/1, output_remove_accent/1]).
 
 generate(D) ->
 	case io:get_line('') of
 		eof ->
-            output_capital_small(D),
-            output_remove_accent(D),
-            output_map(D),
-			init:stop();
+            D;
         [$#|R] ->
             generate(
                 case R of
                     "NAME:" ++ Name ->
-                        case string:strip(Name, right, $\n) of
-                            "8859-" ++ Id -> 
+                        case string:to_lower(string:strip(Name, right, $\n)) of
+                            "iso-8859-" ++ Id -> 
                                 dict:append(name, "iso-8859-" ++ Id, dict:erase(name, D));
-                            "CP" ++ Id ->
+                            "cp" ++ Id ->
                                 dict:append(name, "cp" ++ Id, dict:erase(name, D))
                         end;
                     _ ->
@@ -77,8 +71,8 @@ extract_small_capital(Fun) ->
 output_map(D) ->
     S2 = run(D, extract_all(
             fun (S, CP, _Letter, _Accent, I, U) ->
-                    sets:add_element(io_lib:format("m(unicode, {'~s', 16#~s}) -> 16#~s;", [CP, I, U]), S)
-%                   sets:add_element(io_lib:format("m('~s', {unicode, 16#~s}) -> 16#~s;", [CP, U, I]), S1)
+                    S1 = sets:add_element(io_lib:format("m(unicode, {'~s', 16#~s}) -> 16#~s;", [CP, I, U]), S),
+                    sets:add_element(io_lib:format("m('~s', {unicode, 16#~s}) -> 16#~s;", [CP, U, I]), S1)
             end )),
     [io:format("~s~n", [X]) || X <- sets:to_list(S2)],
     io:format("m(_, {_, _}) -> throw(badarg).~n").
